@@ -1,36 +1,18 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# ChatBot Assistant
 
-## Getting Started
+ChatBot Assistant is an intuitive and interactive application powered by ChatGPT AI. It provides instant answers and assistance to users, offering sample prompts to help users engage in meaningful conversations with the chatbot.
 
-First, run the development server:
+## Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **ChatGPT AI**: Provides real-time responses and assistance.
+- **Sample Prompts**: Offers a variety of prompts to engage users, changing on every reload.
+- **Sleek Design**: Styled with Tailwind CSS for a modern and clean look.
+- **Responsive Layout**: Accessible on various devices, ensuring a consistent user experience.
+- **Dynamic Message Handling**: Smoothly handles user inputs and displays bot responses.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Technologies Used
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- **Next.js 14.2.3**: For building the dynamic and efficient user interface.
+- **OpenAI API**: Powers the chatbot to provide intelligent responses.
+- **Express.js Proxy Server**: Hides the API key and ensures separation of concerns.
+- **Tailwind CSS**: Styles the front-end with a clean and responsive design.
