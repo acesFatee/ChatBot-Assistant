@@ -4,7 +4,7 @@ ChatBot Assistant is an intuitive and interactive application powered by OpenAI 
 
 ## Features
 
-- **ChatGPT AI**: Provides real-time responses and assistance.
+- **OpenAI API**: Provides real-time responses and assistance.
 - **Sample Prompts**: Offers a variety of prompts to engage users, changing on every reload.
 - **Sleek Design**: Styled with Tailwind CSS for a modern and clean look.
 - **Responsive Layout**: Accessible on various devices, ensuring a consistent user experience.
