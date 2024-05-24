@@ -1,11 +1,19 @@
 import ChatArea from "@/components/ChatArea";
-import Sidebar from "@/components/Sidebar";
-import Image from "next/image";
 
-export default function Home() {
+export default async function Home() {
+  const response = await fetch("http://localhost:5000/get-sample-prompts", {
+    method: "GET",
+  })
+  const data = await response.json();
+  let samplePrompts
+  try {
+    samplePrompts = JSON?.parse(data.result.content)
+  } catch (error) {
+    samplePrompts = []
+  }
   return (
     <>
-      <ChatArea />
+      <ChatArea samplePrompts={samplePrompts}/>
     </>
   );
 }

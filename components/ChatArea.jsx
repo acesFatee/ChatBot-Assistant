@@ -1,99 +1,133 @@
-import React from "react";
-import Input from "./Input";
+"use client";
 
-export default function ChatArea() {
+import React, { useEffect, useRef, useState } from "react";
+import Input from "./Input";
+import Message from "./Message";
+
+export default function ChatArea({ samplePrompts }) {
+  const [messages, setMessages] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState({
+    role: "user",
+    content: "",
+  });
+
+  const chatContainerRef = useRef(null);
+  const sendMessageRef = useRef(null);
+
+  
+
+  useEffect(() => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTo({
+        top: chatContainerRef.current.scrollHeight,
+        behavior: "smooth",
+      });
+    }
+  }, [messages, loading]);
+
   return (
-    <div className="h-screen flex flex-col">
-      <section className="flex-grow messages-section overflow-y-auto p-4 flex justify-center">
+    <div className="h-screen dark:bg-gray-700 flex flex-col">
+      <section
+        ref={chatContainerRef}
+        className="flex-grow messages-section max-h-screen overflow-y-auto p-4 flex justify-center"
+      >
         <div className="message-area w-full md:w-2/3">
-          <div className="first-message border bg-base-300 p-4">
-            <OpeningMessage />
+          {
+            <div className="first-message border-b border-base-300 bg-base-300 md:p-2">
+              <OpeningMessage
+                samplePrompts={samplePrompts}
+                setMessages={setMessages}
+                messages={messages}
+                setLoading={setLoading}
+              />
+            </div>
+          }
+          <div className="messages">
+            {messages?.map((m, i) => (
+              <Message key={i} role={m.role} content={m.content} />
+            ))}
           </div>
         </div>
+       
       </section>
       <section className="input-area flex justify-center p-4 shadow-md">
         <div className="w-full md:w-2/3">
-          <Input />
+          <Input
+            setMessages={setMessages}
+            setLoading={setLoading}
+            loading={loading}
+            setMessage={setMessage}
+            message={message}
+            sendMessageRef={sendMessageRef}
+          />
         </div>
       </section>
     </div>
   );
 }
 
-const OpeningMessage = () => {
+const OpeningMessage = ({
+  samplePrompts,
+  setMessages,
+  setLoading
+}) => {
+  const borderColors = ["border-green-500", "border-red-500", "border-blue-500", "border-purple-500"]
+  const sendMessage = async (prompt) => {
+    setLoading(true);
+    try {
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: "user",
+          content: prompt,
+        },
+        {
+          role: "loading",
+        },
+      ]);
+
+      const response = await fetch("http://localhost:5000/create-chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ prompt }),
+      });
+
+      setMessages((prev) => prev.slice(0, -1));
+
+      if (response.ok) {
+        const messageFromGPT = await response.json();
+        setMessages((prev) => [...prev, messageFromGPT.result]);
+        setLoading(false);
+      } else {
+        setLoading(false);
+      }
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+
+
   return (
-    <>
-      <div className="opening-message w-full grid place-items-center text-center space-y-4">
-        <span className="message text-2xl md:text-4xl my-4 text-gray-800">
-          How can I help you today?
-        </span>
-        <div className="container w-full grid grid-cols-3 gap-4 place-items-center text-center">
-          <div className="add-file-container flex flex-col items-center">
-            <span className="file-icon">
-              <svg
-                className="w-10 h-10 text-gray-800"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                fill="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M9 2.221V7H4.221a2 2 0 0 1 .365-.5L8.5 2.586A2 2 0 0 1 9 2.22ZM11 2v5a2 2 0 0 1-2 2H4v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2h-7Zm-.293 9.293a1 1 0 0 1 0 1.414L9.414 14l1.293 1.293a1 1 0 0 1-1.414 1.414l-2-2a1 1 0 0 1 0-1.414l2-2a1 1 0 0 1 1.414 0Zm2.586 1.414a1 1 0 0 1 1.414-1.414l2 2a1 1 0 0 1 0 1.414l-2 2a1 1 0 0 1-1.414-1.414L14.586 14l-1.293-1.293Z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            </span>
-            <span className="mt-2 text-gray-600">Upload Files</span>
-          </div>
-          <div className="ask-anything-container flex flex-col items-center">
-            <span className="question-icon">
-              <svg
-                className="w-10 h-10 text-gray-800"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M9.529 9.988a2.502 2.502 0 1 1 5 .191A2.441 2.441 0 0 1 12 12.582V14m-.01 3.008H12M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                />
-              </svg>
-            </span>
-            <span className="mt-2 text-gray-600">Ask Anything</span>
-          </div>
-          <div className="add-image-container flex flex-col items-center">
-            <span className="image-icon">
-              <svg
-                className="w-10 h-10 text-gray-800"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="m3 16 5-7 6 6.5m6.5 2.5L16 13l-4.286 6M14 10h.01M4 19h16a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1Z"
-                />
-              </svg>
-            </span>
-            <span className="mt-2 text-gray-600">Upload Images</span>
-          </div>
-        </div>
-      </div>
-    </>
+    <div className="opening-message w-full grid place-items-center text-center space-y-4 mb-3">
+      <h1 className="py-5 text-3xl font-bold leading-none tracking-tight md:text-4xl lg:text-4xl ">
+        How can I help you today?
+      </h1>
+      <div className="grid px-5 place-items-center grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-12 sample-prompts">
+  {samplePrompts?.map((p, i) => (
+    <div
+      onClick={() => sendMessage(p)}
+      key={i}
+      className={`prompt hover:bg-blue-50 ${borderColors[i]} rounded-3xl border-2 h-40 w-40 bg-base-300 border-dotted flex flex-col items-center justify-center px-5 hover:cursor-pointer`}
+    >
+      <span className="w-32 text-center">{p}</span>
+    </div>
+  ))}
+</div>
+
+    </div>
   );
 };
