@@ -1,6 +1,6 @@
 # ChatBot Assistant
 
-ChatBot Assistant is an intuitive and interactive application powered by ChatGPT AI. It provides instant answers and assistance to users, offering sample prompts to help users engage in meaningful conversations with the chatbot.
+ChatBot Assistant is an intuitive and interactive application powered by OpenAI API. It provides instant answers and assistance to users, offering sample prompts to help users engage in meaningful conversations with the chatbot.
 
 ## Features
 
