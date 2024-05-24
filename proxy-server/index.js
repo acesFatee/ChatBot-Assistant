@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
+const PORT = process.env.PORT || 5000
 require("dotenv").config();
 
 app.use(cors());
@@ -48,4 +49,4 @@ app.post("/create-chat", async (req, res) => {
   }
 });
 
-app.listen(5000, () => console.log("Proxy server is up"));
+app.listen(PORT, () => console.log("Proxy server is up on port: "+PORT));

@@ -6,6 +6,7 @@
 .pnp.js
 .yarn/install-state.gz
 /proxy-server/node_modules
+/proxy-server/.env
 
 # testing
 /coverage
