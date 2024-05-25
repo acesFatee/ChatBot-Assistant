@@ -30,7 +30,7 @@ export default function Input({
         content: "",
       });
 
-      const response = await fetch("http://localhost:5000/create-chat", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/create-chat`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

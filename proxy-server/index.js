@@ -4,7 +4,7 @@ const cors = require("cors");
 const PORT = process.env.PORT || 5000
 require("dotenv").config();
 
-app.use(cors());
+app.use(cors())
 
 app.use(express.json());
 
@@ -15,6 +15,11 @@ const config = new OpenAI({
 
 const openai = new OpenAI(config);
 
+app.use((req, res, next) => {
+  console.log(`Received request: ${req.method} ${req.url}`);
+  next();
+});
+
 app.get("/get-sample-prompts", async (req, res) => {
   try {
     const completion = await openai.chat.completions.create({
@@ -24,7 +29,7 @@ app.get("/get-sample-prompts", async (req, res) => {
           content: process.env.GET_SAMPLE_PROMPTS,
         },
       ],
-      model: "gpt-4o",
+      model: "gpt-3.5-turbo",
     });
 
     return res.status(201).json({ result: completion.choices[0].message });
@@ -39,7 +44,7 @@ app.post("/create-chat", async (req, res) => {
     const { prompt } = req.body;
     const completion = await openai.chat.completions.create({
       messages: [{ role: "user", content: prompt }],
-      model: "gpt-4o",
+      model: "gpt-3.5-turbo",
     });
 
     return res.status(201).json({ result: completion.choices[0].message });
