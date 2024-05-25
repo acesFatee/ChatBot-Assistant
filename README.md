@@ -16,3 +16,5 @@ ChatBot Assistant is an intuitive and interactive application powered by OpenAI 
 - **OpenAI API**: Powers the chatbot to provide intelligent responses.
 - **Express.js Proxy Server**: Hides the API key and ensures separation of concerns.
 - **Tailwind CSS**: Styles the front-end with a clean and responsive design.
+
+[Try ChatBot Assistant](https://chat-bot-assistant-ten.vercel.app/)
