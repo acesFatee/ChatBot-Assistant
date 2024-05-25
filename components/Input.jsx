@@ -7,6 +7,7 @@ export default function Input({
   message,
   setMessage,
   sendMessageRef,
+  messages
 }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -30,12 +31,20 @@ export default function Input({
         content: "",
       });
 
+      const rememberMessagePrompt = `
+        Previous Messages: ${JSON.stringify(messages)}
+
+        (Our previous conversation)
+  
+        Current Message: ${prompt}
+      `;
+
       const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/create-chat`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ prompt: prompt }),
+        body: JSON.stringify({ prompt: rememberMessagePrompt }),
       });
 
       setMessages((prev) => prev.slice(0, -1));

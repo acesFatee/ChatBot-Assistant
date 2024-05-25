@@ -58,6 +58,7 @@ export default function ChatArea({ samplePrompts }) {
             setMessage={setMessage}
             message={message}
             sendMessageRef={sendMessageRef}
+            messages = {messages}
           />
         </div>
       </section>
@@ -70,6 +71,7 @@ const OpeningMessage = ({
   setMessages,
   setLoading,
   loading,
+  messages,
 }) => {
   const borderColors = [
     "border-green-500",
@@ -94,6 +96,14 @@ const OpeningMessage = ({
         },
       ]);
 
+      const rememberMessagePrompt = `
+        Previous Messages: ${JSON.stringify(messages)}
+
+        (Our previous conversation)
+  
+        Current Message: ${prompt}
+      `;
+
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/create-chat`,
         {
@@ -101,7 +111,7 @@ const OpeningMessage = ({
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ prompt }),
+          body: JSON.stringify({ prompt: rememberMessagePrompt }),
         }
       );
 
