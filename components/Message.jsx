@@ -7,7 +7,6 @@ const MarkdownMessage = ({ content }) => {
   return (
     <div className="prose max-w-none">
       <ReactMarkdown
-        children={content}
         remarkPlugins={[remarkGfm]}
         components={{
           code({ node, inline, className, children, ...props }) {
@@ -20,7 +19,9 @@ const MarkdownMessage = ({ content }) => {
             );
           },
         }}
-      />
+      >
+        {content}
+      </ReactMarkdown>
     </div>
   );
 };
