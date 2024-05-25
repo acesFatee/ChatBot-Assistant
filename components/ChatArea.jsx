@@ -15,8 +15,6 @@ export default function ChatArea({ samplePrompts }) {
   const chatContainerRef = useRef(null);
   const sendMessageRef = useRef(null);
 
-  
-
   useEffect(() => {
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTo({
@@ -40,6 +38,7 @@ export default function ChatArea({ samplePrompts }) {
                 setMessages={setMessages}
                 messages={messages}
                 setLoading={setLoading}
+                loading={loading}
               />
             </div>
           }
@@ -49,7 +48,6 @@ export default function ChatArea({ samplePrompts }) {
             ))}
           </div>
         </div>
-       
       </section>
       <section className="input-area flex justify-center p-4 shadow-md">
         <div className="w-full md:w-2/3">
@@ -70,10 +68,19 @@ export default function ChatArea({ samplePrompts }) {
 const OpeningMessage = ({
   samplePrompts,
   setMessages,
-  setLoading
+  setLoading,
+  loading,
 }) => {
-  const borderColors = ["border-green-500", "border-red-500", "border-blue-500", "border-purple-500"]
+  const borderColors = [
+    "border-green-500",
+    "border-red-500",
+    "border-blue-500",
+    "border-purple-500",
+  ];
   const sendMessage = async (prompt) => {
+    if (loading) {
+      return;
+    }
     setLoading(true);
     try {
       setMessages((prev) => [
@@ -87,13 +94,16 @@ const OpeningMessage = ({
         },
       ]);
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/create-chat`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ prompt }),
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/create-chat`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ prompt }),
+        }
+      );
 
       setMessages((prev) => prev.slice(0, -1));
 
@@ -110,24 +120,22 @@ const OpeningMessage = ({
     }
   };
 
-
   return (
     <div className="opening-message w-full grid place-items-center text-center space-y-4 mb-3">
       <h1 className="py-5 text-3xl font-bold leading-none tracking-tight md:text-4xl lg:text-4xl ">
         How can I help you today?
       </h1>
       <div className="grid px-5 place-items-center grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-12 sample-prompts">
-  {samplePrompts?.map((p, i) => (
-    <div
-      onClick={() => sendMessage(p)}
-      key={i}
-      className={`prompt hover:bg-blue-50 ${borderColors[i]} rounded-3xl border-2 h-40 w-40 bg-base-300 border-dotted flex flex-col items-center justify-center px-5 hover:cursor-pointer`}
-    >
-      <span className="w-32 text-center">{p}</span>
-    </div>
-  ))}
-</div>
-
+        {samplePrompts?.map((p, i) => (
+          <div
+            onClick={() => sendMessage(p)}
+            key={i}
+            className={`prompt hover:bg-blue-50 ${borderColors[i]} rounded-3xl border-2 h-40 w-40 bg-base-300 border-dotted flex flex-col items-center justify-center px-5 hover:cursor-pointer`}
+          >
+            <span className="w-32 text-center">{p}</span>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

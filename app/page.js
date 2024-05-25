@@ -3,6 +3,7 @@ import ChatArea from "@/components/ChatArea";
 export default async function Home() {
   const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/get-sample-prompts`, {
     method: "GET",
+    cache: 'no-store'
   })
   const data = await response.json();
   let samplePrompts
