@@ -20,6 +20,10 @@ app.use((req, res, next) => {
   next();
 });
 
+app.get('/', (req, res) => {
+  return res.status(200).json({success: "Ping Successful"})
+})
+
 app.get("/get-sample-prompts", async (req, res) => {
   try {
     const completion = await openai.chat.completions.create({
